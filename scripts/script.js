@@ -3,16 +3,14 @@ var searchButton = $("#search-button");
 var searchHistory = $("#search-history");
 var weatherNow = $("#weather-now");
 var weatherFiveDay = $("#weather-five-day");
-// var recentSearches = [];
 
 var recentSearches = JSON.parse(localStorage.getItem("recentSearches"));
 
 loadSavedRecent();
 
-function queryFromRecent() {
-  console.log($(this).attr("data-name"));
-  var cityName = $(this).attr("data-name");
+// Functions
 
+function getWeather(cityName) {
   var apiKey = "731e9f8a098503cff9f880ca0083adaa";
   var currentWeatherURL =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -27,8 +25,6 @@ function queryFromRecent() {
     apiKey +
     "&units=imperial";
   // var currentUvi = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon" + lon + "&appid=" + apiKey;
-
-  // currentWeather();
 
   weatherNow.html("");
 
@@ -50,7 +46,21 @@ function queryFromRecent() {
   });
 }
 
-$(document).on("click", ".list-group-item", queryFromRecent);
+function queryFromInput(event) {
+  event.preventDefault();
+  var cityName = $("#search-input").val().trim();
+  recentSearches.unshift(cityName);
+  localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+  addToRecent();
+  console.log(cityName);
+  getWeather(cityName);
+}
+
+function queryFromRecent() {
+  console.log($(this).attr("data-name"));
+  var cityName = $(this).attr("data-name");
+  getWeather(cityName);
+}
 
 function loadSavedRecent() {
   if (recentSearches) {
@@ -77,53 +87,6 @@ function addToRecent() {
   }
 }
 
-$("#search-button").on("click", function (event) {
-  event.preventDefault();
-
-  var cityName = $("#search-input").val().trim();
-
-  recentSearches.unshift(cityName);
-  localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
-  addToRecent();
-  console.log(cityName);
-
-  var apiKey = "731e9f8a098503cff9f880ca0083adaa";
-  var currentWeatherURL =
-    "https://api.openweathermap.org/data/2.5/weather?q=" +
-    cityName +
-    "&appid=" +
-    apiKey +
-    "&units=imperial";
-  var fiveDayWeatherURL =
-    "https:///api.openweathermap.org/data/2.5/forecast?q=" +
-    cityName +
-    "&appid=" +
-    apiKey +
-    "&units=imperial";
-  // var currentUvi = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon" + lon + "&appid=" + apiKey;
-
-  // currentWeather();
-
-  weatherNow.html("");
-
-  $.ajax({
-    url: currentWeatherURL,
-    method: "GET",
-  }).then(function (response) {
-    console.log(response);
-
-    var thisCity = $("<H3>").text(response.name + " " + response.dt);
-    var tempNow = $("<p>").text("Temperature: " + response.main.temp);
-    var humidityNow = $("<p>").text("Humidity: " + response.main.humidity);
-    var windSpeedNow = $("<p>").text("Wind Speed: " + response.wind.speed);
-    var uvIndex = "UV Index: ";
-    var lat = response.coord.lat;
-    var lon = response.coord.lon;
-
-    weatherNow.append(thisCity, tempNow, humidityNow, windSpeedNow, uvIndex);
-  });
-});
-
 function getDate(unixTimestamp) {
   var date = new Date(unixTimestamp * 1000);
   var month = date.getMonth();
@@ -134,37 +97,11 @@ function getDate(unixTimestamp) {
   return month + "/" + day + "/" + year;
 }
 
-function currentWeather() {
-  $.ajax({
-    url: currentWeatherURL,
-    method: "GET",
-  }).then(function (response) {
-    var thisCity = $("<H3>").text(response.name + response.dt);
-    // var thisDate = $("<H3>").text(response.dt);
-    // var cityDate = thisCity + thisDate;
-    var tempNow = $("<p>").text("Temperature: " + response.main.temp);
-    var humidityNow = $("<p>").text("Humidity: " + response.main.humidity);
-    var windSpeedNow = $("<p>").text("Wind Speed: " + response.wind.speed);
-    var uvIndex = "UV Index: ";
-    var lat = response.coord.lat;
-    var lon = response.coord.lon;
+// Click events
 
-    // var name = response.name;
-    // var temp = response.main.temp;
-    // var humidity = response.main.humidity;
-    // var wind = response.wind.speed;
+$("#search-button").on("click", queryFromInput);
 
-    weatherNow.append(thisCity, tempNow, humidityNow, windSpeedNow, uvIndex);
-
-    console.log(response);
-    // console.log(name);
-    // console.log(temp);
-    // console.log(humidity);
-    // console.log(wind);
-    // console.log(lat);
-    // console.log(lon);
-  });
-}
+$(document).on("click", ".list-group-item", queryFromRecent);
 
 // function currentUvi() {
 //     $.ajax({
