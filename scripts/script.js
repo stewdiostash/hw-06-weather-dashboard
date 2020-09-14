@@ -6,11 +6,12 @@ var weatherFiveDay = $("#weather-five-day");
 
 var recentSearches = JSON.parse(localStorage.getItem("recentSearches"));
 
-loadSavedRecent();
+init();
 
 // Functions
 
-function getWeather(cityName) {
+function getCurrentWeather(cityName) {
+  
   var apiKey = "731e9f8a098503cff9f880ca0083adaa";
   var currentWeatherURL =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -18,13 +19,6 @@ function getWeather(cityName) {
     "&appid=" +
     apiKey +
     "&units=imperial";
-  var fiveDayWeatherURL =
-    "https:///api.openweathermap.org/data/2.5/forecast?q=" +
-    cityName +
-    "&appid=" +
-    apiKey +
-    "&units=imperial";
-  // var currentUvi = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon" + lon + "&appid=" + apiKey;
 
   weatherNow.html("");
 
@@ -33,17 +27,70 @@ function getWeather(cityName) {
     method: "GET",
   }).then(function (response) {
     console.log(response);
+    console.log(response.weather[0].icon);
 
     var thisCity = $("<H3>").text(response.name + " " + response.dt);
     var tempNow = $("<p>").text("Temperature: " + response.main.temp);
     var humidityNow = $("<p>").text("Humidity: " + response.main.humidity);
     var windSpeedNow = $("<p>").text("Wind Speed: " + response.wind.speed);
-    var uvIndex = "UV Index: ";
+    var iconCode = response.weather[0].icon;
+    var icon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+ response.weather[0].icon + "@2x.png");
     var lat = response.coord.lat;
     var lon = response.coord.lon;
 
-    weatherNow.append(thisCity, tempNow, humidityNow, windSpeedNow, uvIndex);
+    weatherNow.append(thisCity, icon, tempNow, humidityNow, windSpeedNow);
+
+    getCurrentUvi(lat, lon);
+
   });
+
+}
+
+function getCurrentUvi(lat, lon) {
+
+  var apiKey = "731e9f8a098503cff9f880ca0083adaa";
+  var currentUviURL =
+    "https://api.openweathermap.org/data/2.5/uvi?lat=" +
+    lat +
+    "&lon=" +
+    lon +
+    "&appid=" +
+    apiKey;
+
+  $.ajax({
+    url: currentUviURL,
+    method: "GET",
+  }).then(function (response) {
+    console.log(response);
+
+    var uvIndex = $("<p>").text("UV Index: " + response.value);
+    weatherNow.append(uvIndex);
+
+    $("#search-results").show();
+
+  });
+}
+
+function getForecast(cityName) {
+  var apiKey = "731e9f8a098503cff9f880ca0083adaa";
+
+  var forecastURL =
+    "https:///api.openweathermap.org/data/2.5/forecast?q=" +
+    cityName +
+    "&appid=" +
+    apiKey +
+    "&units=imperial";
+
+  weatherNow.html("");
+
+  $.ajax({
+    url: forecastURL,
+    method: "GET",
+  }).then(function (response) {
+    console.log(response);
+  });
+
+  $("#weather-five-day").show();
 }
 
 function queryFromInput(event) {
@@ -53,16 +100,18 @@ function queryFromInput(event) {
   localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
   addToRecent();
   console.log(cityName);
-  getWeather(cityName);
+  getCurrentWeather(cityName);
 }
 
 function queryFromRecent() {
   console.log($(this).attr("data-name"));
   var cityName = $(this).attr("data-name");
-  getWeather(cityName);
+  getCurrentWeather(cityName);
 }
 
-function loadSavedRecent() {
+function init() {
+  $("#search-results").hide();
+  $("#weather-five-day").hide();
   if (recentSearches) {
     for (var i = 0; i < recentSearches.length; i++) {
       var savedRecent = $("<li>");
@@ -102,35 +151,3 @@ function getDate(unixTimestamp) {
 $("#search-button").on("click", queryFromInput);
 
 $(document).on("click", ".list-group-item", queryFromRecent);
-
-// function currentUvi() {
-//     $.ajax({
-//         url: currentUviURL,
-//         method: "GET"
-//       }).then(function(response) {
-
-//         var lat;
-//         var long;
-//         var uvIndex;
-
-//         console.log(response);
-
-//       });
-// }
-
-// function fiveDayWeather(cityName) {
-//     $.ajax({
-//         url: fiveDayWeatherURL,
-//         method: "GET"
-//       }).then(function(response) {
-
-//         var thisCity = cityName;
-//         var dayOne = response;
-
-//         console.log(response);
-//         console.log(response.list);
-
-//       });
-// }
-
-// fiveDayWeather("Atlanta");
