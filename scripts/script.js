@@ -7,30 +7,67 @@ var weatherFiveDay = $("#weather-five-day");
 
 var recentSearches = JSON.parse(localStorage.getItem("recentSearches"));
 
-// if (!recentSearches) {
-//     recentSearches = [];
-//   }
-  
 loadSavedRecent();
 
+function queryFromRecent() {
+  console.log($(this).attr("data-name"));
+  var cityName = $(this).attr("data-name");
 
-function loadSavedRecent() {
-    if (recentSearches){
-        for (var i = 0; i < recentSearches.length; i++) {
-            var savedRecent = $("<li>");
-            savedRecent.addClass("list-group-item");
-            savedRecent.text(recentSearches[i]);
-            savedRecent.attr("data-name", recentSearches[i]);
-            searchHistory.append(savedRecent);
-        } 
-    } else {
-        recentSearches = [];
-    }
+  var apiKey = "731e9f8a098503cff9f880ca0083adaa";
+  var currentWeatherURL =
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    cityName +
+    "&appid=" +
+    apiKey +
+    "&units=imperial";
+  var fiveDayWeatherURL =
+    "https:///api.openweathermap.org/data/2.5/forecast?q=" +
+    cityName +
+    "&appid=" +
+    apiKey +
+    "&units=imperial";
+  // var currentUvi = "https://api.openweathermap.org/data/2.5/uvi?lat=" + lat + "&lon" + lon + "&appid=" + apiKey;
+
+  // currentWeather();
+
+  weatherNow.html("");
+
+  $.ajax({
+    url: currentWeatherURL,
+    method: "GET",
+  }).then(function (response) {
+    console.log(response);
+
+    var thisCity = $("<H3>").text(response.name + " " + response.dt);
+    var tempNow = $("<p>").text("Temperature: " + response.main.temp);
+    var humidityNow = $("<p>").text("Humidity: " + response.main.humidity);
+    var windSpeedNow = $("<p>").text("Wind Speed: " + response.wind.speed);
+    var uvIndex = "UV Index: ";
+    var lat = response.coord.lat;
+    var lon = response.coord.lon;
+
+    weatherNow.append(thisCity, tempNow, humidityNow, windSpeedNow, uvIndex);
+  });
 }
 
-// var cityName = "Atlanta";
+$(document).on("click", ".list-group-item", queryFromRecent);
+
+function loadSavedRecent() {
+  if (recentSearches) {
+    for (var i = 0; i < recentSearches.length; i++) {
+      var savedRecent = $("<li>");
+      savedRecent.addClass("list-group-item");
+      savedRecent.text(recentSearches[i]);
+      savedRecent.attr("data-name", recentSearches[i]);
+      searchHistory.append(savedRecent);
+    }
+  } else {
+    recentSearches = [];
+  }
+}
 
 function addToRecent() {
+  searchHistory.empty();
   for (var i = 0; i < recentSearches.length; i++) {
     var newRecent = $("<li>");
     newRecent.addClass("list-group-item");
@@ -40,12 +77,13 @@ function addToRecent() {
   }
 }
 
-$("#search-button").on("click", function () {
-  var cityName = $("#search-input").val();
+$("#search-button").on("click", function (event) {
+  event.preventDefault();
+
+  var cityName = $("#search-input").val().trim();
 
   recentSearches.unshift(cityName);
   localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
-  searchHistory.empty();
   addToRecent();
   console.log(cityName);
 
