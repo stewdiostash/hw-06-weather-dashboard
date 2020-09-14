@@ -1,0 +1,88 @@
+/* body {
+    background-color: black;
+    color: white;
+} */
+
+/* Typography */
+
+body {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-weight: 400;
+}
+
+h1 {
+    font-size: 54px;
+    font-weight: 200;
+    /* text-align: center; */
+}
+
+h2 {
+    font-size: 44px;
+    font-weight: 400;
+    margin-bottom: 30px;
+}
+
+h3 {
+    font-size: 34px;
+    line-height: 44px;
+    margin-bottom: 30px;
+}
+
+h4 {
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: 200;
+    margin-bottom: 30px;
+}
+
+p {
+    font-size: 18px;
+}
+
+li {
+    font-size: 21px;
+}
+
+
+/* Sections */
+
+#search-col {
+    background-color: #F8F9FA;
+    height: 100%;
+}
+
+.navbar {
+    height: 120px;
+    background-color: #343A40;
+}
+
+#search-history,
+#search-results,
+#weather-five-day {
+    padding: 15px;
+}
+
+.card {
+    margin: 10px;
+}
+
+#master-row {
+    margin: 0;
+}
+
+#headline {
+    margin: auto auto auto 15px;
+}
+
+.col-xl {
+    color: white;
+    background-color: #007BFF;
+    border: none;
+    padding: 0px;
+}
+
+#search-history {
+    padding: 0px;
+}
+
+
