@@ -85,4 +85,12 @@ li {
     padding: 0px;
 }
 
+.form-control {
+    flex-grow: 1;
+}
+
+#search-form {
+    ma
+}
+
 

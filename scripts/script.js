@@ -1,6 +1,7 @@
 var searchInput = $("#search-input");
 var searchButton = $("#search-button");
 var searchHistory = $("#search-history");
+var weatherReport = $("#weather-report");
 var weatherNow = $("#weather-now");
 var weatherFiveDay = $("#weather-five-day");
 
@@ -42,6 +43,8 @@ function getCurrentWeather(cityName) {
 
     getCurrentUvi(lat, lon);
 
+    weatherReport.show();
+
   });
 
 }
@@ -66,7 +69,7 @@ function getCurrentUvi(lat, lon) {
     var uvIndex = $("<p>").text("UV Index: " + response.value);
     weatherNow.append(uvIndex);
 
-    $("#search-results").show();
+    searchHistory.show();
 
   });
 }
@@ -90,7 +93,7 @@ function getForecast(cityName) {
     console.log(response);
   });
 
-  $("#weather-five-day").show();
+  // weatherReport.show();
 }
 
 function queryFromInput(event) {
@@ -110,9 +113,10 @@ function queryFromRecent() {
 }
 
 function init() {
-  $("#search-results").hide();
-  $("#weather-five-day").hide();
+  weatherReport.hide();
+  searchHistory.hide();
   if (recentSearches) {
+    searchHistory.show();
     for (var i = 0; i < recentSearches.length; i++) {
       var savedRecent = $("<li>");
       savedRecent.addClass("list-group-item");
@@ -148,6 +152,6 @@ function getDate(unixTimestamp) {
 
 // Click events
 
-$("#search-button").on("click", queryFromInput);
+$("#search-form").on("submit", queryFromInput);
 
 $(document).on("click", ".list-group-item", queryFromRecent);

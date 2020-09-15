@@ -34,31 +34,23 @@
         <div class="col-sm-6 col-md-3 p-4" id="search-col">
           <h5 class="mb-2">Search for a city</h5>
 
-          <div class="input-group mb-4">
-            <input
-              type="text"
-              class="form-control"
-              id="search-input"
-              placeholder="City name"
-              aria-label="City name"
-              aria-describedby="basic-addon2"
-            />
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" id="search-button" type="button">
-                Search
-              </button>
-            </div>
-          </div>
-          <div class="card m-0 p-0" >
-            <ul class="list-group list-group-flush" id="search-history">
+          <form id="search-form" class="form-inline mb-4">
+            <input type="text" class="form-control mb-2 mr-sm-2" id="search-input" placeholder="City name">
+          
+            <button type="submit" class="btn btn-primary mb-2">Submit</button>
+          </form>
+
+          <div class="card m-0 p-0" id="search-history">
+            <ul class="list-group list-group-flush">
               <!-- <li class="list-group-item">Boston</li>
               <li class="list-group-item">Tampa</li>
               <li class="list-group-item">El Paso</li> -->
             </ul>
           </div>
         </div>
-        <div class="col-sm-6 col-md-9" >
-          <div class="row" id="search-results">
+
+        <div class="col-sm-6 col-md-9" id="weather-report">
+          <div class="row">
             <div class="col card">
               <div class="card-body" id="weather-now">
               </div>
