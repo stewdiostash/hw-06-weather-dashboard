@@ -14,9 +14,10 @@ var recentSearches = JSON.parse(localStorage.getItem("recentSearches"));
 init();
 
 
+
 // Functions
 
-function getLatLon(cityName) {
+function getCurrentWeather(cityName) {
   
   var apiKey = "731e9f8a098503cff9f880ca0083adaa";
   var currentWeatherURL =
@@ -26,18 +27,32 @@ function getLatLon(cityName) {
     apiKey +
     "&units=imperial";
 
+  weatherNow.html("");
+
   $.ajax({
     url: currentWeatherURL,
     method: "GET",
   }).then(function (response) {
     console.log(response);
+    // console.log(response.weather[0].icon);
 
+    var thisCity = $("<H3>").text(response.name + " " + "(" + moment().add(1,'days').format('MM/DD/YYYY') + ")" );
+    var tempNow = $("<p>").text("Temperature: " + response.main.temp);
+    var humidityNow = $("<p>").text("Humidity: " + response.main.humidity);
+    var windSpeedNow = $("<p>").text("Wind Speed: " + response.wind.speed);
+    var icon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+ response.weather[0].icon + "@2x.png");
     var lat = response.coord.lat;
     var lon = response.coord.lon;
 
-    getWeather(cityName, lat, lon);
-    
+    weatherNow.append(thisCity, icon, tempNow, humidityNow, windSpeedNow);
+
+    getCurrentUvi(lat, lon);
+    getForecast(lat, lon);
+
+    weatherReport.show();
+
   });
+
 }
 
 function getCurrentUvi(lat, lon) {
@@ -55,6 +70,7 @@ function getCurrentUvi(lat, lon) {
     url: currentUviURL,
     method: "GET",
   }).then(function (response) {
+    // console.log(response);
 
     var uvIndex = $("<p>").text("UV Index: " + response.value);
     weatherNow.append(uvIndex);
@@ -62,7 +78,7 @@ function getCurrentUvi(lat, lon) {
   });
 }
 
-function getWeather(cityName, lat, lon) {
+function getForecast(lat, lon) {
   var apiKey = "731e9f8a098503cff9f880ca0083adaa";
 
   var forecastURL =
@@ -79,20 +95,10 @@ function getWeather(cityName, lat, lon) {
     method: "GET",
   }).then(function (response) {
     console.log(response);
-  
-    var thisCity = $("<H3>").text(cityName + " " + "(" + moment().format('MM/DD/YYYY') + ")" );
-    var tempNow = $("<p>").text("Temperature: " + response.current.temp);
-    var humidityNow = $("<p>").text("Humidity: " + response.current.humidity);
-    var windSpeedNow = $("<p>").text("Wind Speed: " + response.current.wind_speed);
-    var icon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+ response.current.weather[0].icon + "@2x.png");
-    var uvi = $("<p>").text("UV Index: " + response.current.uvi);
-
-    weatherNow.append(thisCity, icon, tempNow, humidityNow, windSpeedNow, uvi);
-    // getCurrentUvi(lat, lon);
 
     weatherFiveDay.html("");
 
-    for (var i = 1; i < 6; i++ ) {
+    for (var i = 1; i < 5; i++ ) {
       var newCard = $("<div>").addClass("col-xl card");
       var newCardLiner = $("<div>").addClass("card-body");
 
@@ -106,11 +112,9 @@ function getWeather(cityName, lat, lon) {
       weatherFiveDay.append(newCard);
     }
 
-    weatherReport.show();
-
   });
 
-
+  // weatherReport.show();
 }
 
 function queryFromInput(event) {
@@ -121,12 +125,14 @@ function queryFromInput(event) {
   addToRecent();
   console.log(cityName);
   searchHistory.show();
-  getLatLon(cityName);
+  getCurrentWeather(cityName);
+  // getForecast(cityName);
 }
 
 function queryFromRecent() {
   var cityName = $(this).attr("data-name");
-  getLatLon(cityName);
+  getCurrentWeather(cityName);
+  // getForecast(cityName);
 }
 
 function init() {
