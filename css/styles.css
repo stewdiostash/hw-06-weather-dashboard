@@ -56,10 +56,10 @@ li {
     background-color: #343A40;
 }
 
-#search-history,
-#search-results,
+
+#weather-report,
 #weather-five-day {
-    padding: 15px;
+    padding: 15px !important;
 }
 
 .card {
@@ -89,8 +89,8 @@ li {
     flex-grow: 1;
 }
 
-#search-form {
-    ma
+.weather-row {
+    margin: 15px;
 }
 
 

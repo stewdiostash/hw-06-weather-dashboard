@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title></title>
+    <title>Weather Dashboard 1.0</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
@@ -26,7 +26,7 @@
   <body>
     <nav class="navbar navbar-dark bg-dark">
       <span class="navbar-brand mb-0 h1">
-        <h3 id="headline">Weather Dashboard</h3>
+        <h3 id="headline">Weather Dashboard 1.0</h3>
       </span>
     </nav>
     <div id="container-fluid">
@@ -40,7 +40,7 @@
             <button type="submit" class="btn btn-primary mb-2">Submit</button>
           </form>
 
-          <div class="card m-0 p-0" id="search-history">
+          <div id="search-history">
             <ul class="list-group list-group-flush">
               <!-- <li class="list-group-item">Boston</li>
               <li class="list-group-item">Tampa</li>
@@ -50,16 +50,29 @@
         </div>
 
         <div class="col-sm-6 col-md-9" id="weather-report">
-          <div class="row">
-            <div class="col card">
+          <div class="row" id="weather-row">
+            <div class="col card mx-4">
               <div class="card-body" id="weather-now">
               </div>
             </div>
           </div>
-          <div class="row" id="weather-five-day">
-            <div class="col-12">
-              <h3>5-Day Forecast</h3>
+
+          <div class="row">
+            <div class="col-12 ml-2 mt-4">
+              <h3 class="mb-0">5-Day Forecast</h3>
             </div>
+          </div>
+
+          <div class="row" id="weather-five-day">
+
+            <!-- <div class="col-xl card">
+              <div class="card-body">
+                <h4>8/16/2020</h4>
+                <p>Temp:</p>
+                <p>Humidity:</p>
+              </div>
+            </div>
+
             <div class="col-xl card">
               <div class="card-body">
                 <h4>8/16/2020</h4>
@@ -67,34 +80,32 @@
                 <p>Humidity:</p>
               </div>
             </div>
+
             <div class="col-xl card">
               <div class="card-body">
-                <h4>8/17/2020</h4>
+                <h4>8/16/2020</h4>
                 <p>Temp:</p>
                 <p>Humidity:</p>
               </div>
             </div>
+
             <div class="col-xl card">
               <div class="card-body">
-                <h4>8/18/2020</h4>
+                <h4>8/16/2020</h4>
                 <p>Temp:</p>
                 <p>Humidity:</p>
               </div>
             </div>
+
             <div class="col-xl card">
               <div class="card-body">
-                <h4>8/19/2020</h4>
+                <h4>8/16/2020</h4>
                 <p>Temp:</p>
                 <p>Humidity:</p>
               </div>
-            </div>
-            <div class="col-xl card">
-              <div class="card-body">
-                <h4>8/20/2020</h4>
-                <p>Temp:</p>
-                <p>Humidity:</p>
-              </div>
-            </div>
+            </div> -->
+      
+            
           </div>
         </div>
       </div>
@@ -102,6 +113,7 @@
 
   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="scripts/script.js" async defer></script>
   </body>
 </html>
