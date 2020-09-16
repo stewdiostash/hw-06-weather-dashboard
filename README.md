@@ -11,21 +11,21 @@
 
 ## Description
 
-A simple day planner with dynamic "current hour" marker synced with moment.js. Notes and to-dos are saved in local storage.
+A responsive weather dashboard linked to two Openweathermap APIs. Search from input city name or clicking on a recently-searched city. Recents searches are saved in array to local storage.
 
 
 ## Screenshot
 
-![Day Planner UI](images/day_planner_ui.png)
+![Weather Dashboard UI](images/weather_dashboard_ui.png)
 
 
 ## URL
-Deployed at https://stewdiostash.github.io/hw-05-day-planner/
+Deployed at https://stewdiostash.github.io/hw-06-weather-dashboard/
 
 
 ## Contributions
 
-https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+Thanks to Philip Simmons for a few pointers on nested functions.
 
 
 ## License

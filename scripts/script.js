@@ -1,4 +1,6 @@
-var searchInput = $("#search-input");
+  // Variables
+  
+  var searchInput = $("#search-input");
   var searchButton = $("#search-button");
   var searchHistory = $("#search-history");
   var weatherReport = $("#weather-report");
@@ -6,14 +8,63 @@ var searchInput = $("#search-input");
   var weatherFiveDay = $("#weather-five-day");
   var dateNow = moment().format('MM/DD/YYYY');
   var tomorrow = moment().add(1,'days').format('MM/DD/YYYY');
-  console.log(dateNow);
-  console.log(tomorrow);
 
   var recentSearches = JSON.parse(localStorage.getItem("recentSearches"));
+
+  // Function calls
 
   init();
 
   // Functions
+
+  function init() {
+    weatherReport.hide();
+    searchHistory.hide();
+    if (recentSearches) {
+      searchHistory.show();
+      for (var i = 0; i < recentSearches.length; i++) {
+        var savedRecent = $("<li>");
+        savedRecent.addClass("list-group-item");
+        savedRecent.text(recentSearches[i]);
+        savedRecent.attr("data-name", recentSearches[i]);
+        searchHistory.append(savedRecent);
+      }
+    } else {
+      recentSearches = [];
+    }
+  }
+
+  function queryFromInput(event) {
+    event.preventDefault();
+    var cityName = $("#search-input").val().trim();
+
+    if (cityName == "") {
+      alert("Enter a city name")
+    } else {
+      recentSearches.unshift(cityName);
+      localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+      addToRecent();
+      console.log(cityName);
+      searchHistory.show();
+      getLatLon(cityName);
+    }
+  }
+
+  function queryFromRecent() {
+    var cityName = $(this).attr("data-name");
+    getLatLon(cityName);
+  }
+
+  function addToRecent() {
+    searchHistory.empty();
+    for (var i = 0; i < recentSearches.length; i++) {
+      var newRecent = $("<li>");
+      newRecent.addClass("list-group-item");
+      newRecent.text(recentSearches[i]);
+      newRecent.attr("data-name", recentSearches[i]);
+      searchHistory.append(newRecent);
+    }
+  }
 
   function getLatLon(cityName) {
     
@@ -85,7 +136,7 @@ var searchInput = $("#search-input");
       var windSpeedNow = $("<p>").text("Wind Speed: " + response.current.wind_speed);
       var icon = $("<img>").attr("src", "http://openweathermap.org/img/wn/"+ response.current.weather[0].icon + "@2x.png");
       var uviIs = $("<p>").text("UV Index: ");
-      var uvi = $("<span>").html("&nbsp&nbsp" + response.current.uvi + "&nbsp&nbsp").css("border-radius", "3px").css("color", "white");
+      var uvi = $("<span>").html("&nbsp" + response.current.uvi + "&nbsp").css("border-radius", "3px").css("color", "white");
 
       if (response.current.uvi >= 11) {
         uvi = uvi.css("background-color", "#AC5C9A");
@@ -123,64 +174,7 @@ var searchInput = $("#search-input");
     });
   }
 
-  function queryFromInput(event) {
-    event.preventDefault();
-    var cityName = $("#search-input").val().trim();
 
-    if (cityName == "") {
-      alert("Enter a city name")
-    } else {
-      recentSearches.unshift(cityName);
-      localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
-      addToRecent();
-      console.log(cityName);
-      searchHistory.show();
-      getLatLon(cityName);
-    }
-  }
-
-  function queryFromRecent() {
-    var cityName = $(this).attr("data-name");
-    getLatLon(cityName);
-  }
-
-  function init() {
-    weatherReport.hide();
-    searchHistory.hide();
-    if (recentSearches) {
-      searchHistory.show();
-      for (var i = 0; i < recentSearches.length; i++) {
-        var savedRecent = $("<li>");
-        savedRecent.addClass("list-group-item");
-        savedRecent.text(recentSearches[i]);
-        savedRecent.attr("data-name", recentSearches[i]);
-        searchHistory.append(savedRecent);
-      }
-    } else {
-      recentSearches = [];
-    }
-  }
-
-  function addToRecent() {
-    searchHistory.empty();
-    for (var i = 0; i < recentSearches.length; i++) {
-      var newRecent = $("<li>");
-      newRecent.addClass("list-group-item");
-      newRecent.text(recentSearches[i]);
-      newRecent.attr("data-name", recentSearches[i]);
-      searchHistory.append(newRecent);
-    }
-  }
-
-  function getDate(unixTimestamp) {
-    var date = new Date(unixTimestamp * 1000);
-    var month = date.getMonth();
-    var day = date.getDay();
-    var year = date.getFullYear();
-
-    console.log(month + "/" + day + "/" + year);
-    return month + "/" + day + "/" + year;
-  }
 
   // Click events
 
